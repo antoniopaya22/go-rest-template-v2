@@ -1,0 +1,21 @@
+package models
+
+import "time"
+
+type {{cmp_name}} struct {
+	Model
+    {%- for a in attributes %}
+	{{a.name}}   {{a.type}} `gorm:"column:{{a.name.lower()}};not null;" json:"{{a.name.lower()}}" form:"{{a.name.lower()}}"`
+    {%- endfor %}
+}
+
+func (m *Item) BeforeCreate() error {
+	m.CreatedAt = time.Now()
+	m.UpdatedAt = time.Now()
+	return nil
+}
+
+func (m *Item) BeforeUpdate() error {
+	m.UpdatedAt = time.Now()
+	return nil
+}

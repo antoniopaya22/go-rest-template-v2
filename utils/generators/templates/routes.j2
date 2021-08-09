@@ -1,0 +1,15 @@
+package routes
+
+import (
+	"ai4am.com/go-restapi/internal/controllers"
+	"ai4am.com/go-restapi/pkg/middlewares"
+	"github.com/gin-gonic/gin"
+)
+
+func Set{{cmp_name}}sRoutes(app *gin.RouterGroup)  {
+	app.GET("/{{cmp_name.lower()}}s/:id", controllers.Get{{cmp_name}}ById)
+	app.GET("/{{cmp_name.lower()}}s", controllers.Get{{cmp_name}}s)
+	app.POST("/{{cmp_name.lower()}}s", controllers.Create{{cmp_name}})
+	app.PUT("/{{cmp_name.lower()}}s/:id", controllers.Update{{cmp_name}})
+	app.DELETE("/{{cmp_name.lower()}}s/:id", middlewares.AuthRequired(), controllers.Delete{{cmp_name}})
+}

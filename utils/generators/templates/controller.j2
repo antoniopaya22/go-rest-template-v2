@@ -1,0 +1,133 @@
+package controllers
+
+import (
+	"ai4am.com/go-restapi/internal/repository"
+	"ai4am.com/go-restapi/models"
+	"ai4am.com/go-restapi/pkg/helpers"
+	"errors"
+	"fmt"
+	"github.com/gin-gonic/gin"
+	"log"
+	"net/http"
+)
+
+// Get{{cmp_name}}ById godoc
+// @Tags {{cmp_name}}
+// @Summary Retrieves {{cmp_name}} based on given ID
+// @Description get {{cmp_name}} by ID
+// @Produce json
+// @Param id path integer true "{{cmp_name}} ID"
+// @Success 200 {object} models.{{cmp_name}}
+// @Router /api/{{cmp_name.lower()}}/{id} [get]
+// @Security Authorization Token
+func Get{{cmp_name}}ById(c *gin.Context) {
+	s := repository.Get{{cmp_name}}Repository()
+	id := c.Param("id")
+	if {{cmp_name.lower()}}, err := s.Get{{cmp_name}}ById(id); err != nil {
+		helpers.NewError(c, http.StatusNotFound, errors.New("{{cmp_name.lower()}} not found"))
+		log.Println(err)
+	} else {
+		c.JSON(http.StatusOK, {{cmp_name.lower()}})
+	}
+}
+
+// Get{{cmp_name}} godoc
+// @Tags {{cmp_name}}
+// @Summary Retrieves {{cmp_name}} based on query
+// @Description Get {{cmp_name}}
+// @Produce json
+// @Param name query string false "Name"
+// @Param text query string false "Text"
+// @Success 200 {array} []models.{{cmp_name}}
+// @Router /api/{{cmp_name.lower()}} [get]
+func Get{{cmp_name}}s(c *gin.Context) {
+	s := repository.Get{{cmp_name}}Repository()
+	var q models.{{cmp_name}}
+	_ = c.Bind(&q)
+	if {{cmp_name.lower()}}, err := s.Query{{cmp_name}}s(&q); err != nil {
+		c.JSON(http.StatusOK, []models.{{cmp_name}}{})
+		fmt.Println(err)
+	} else {
+		c.JSON(http.StatusOK, {{cmp_name.lower()}})
+	}
+}
+
+// Get{{cmp_name}} godoc
+// @Tags {{cmp_name}}
+// @Summary Creates a new {{cmp_name}}
+// @Description Add {{cmp_name}}
+// @Accept  json
+// @Produce json
+// @Param user body models.{{cmp_name}} true "Add {{cmp_name.lower()}}"
+// @Success 201 {object} models.{{cmp_name}}
+// @Router /api/{{cmp_name.lower()}} [post]
+// @Security Authorization Token
+func Create{{cmp_name}}(c *gin.Context) {
+	s := repository.Get{{cmp_name}}Repository()
+	var {{cmp_name.lower()}}Input models.{{cmp_name}}
+	_ = c.BindJSON(&{{cmp_name.lower()}}Input)
+	fmt.Println({{cmp_name.lower()}}Input)
+	if err := s.Add{{cmp_name}}(&{{cmp_name.lower()}}Input); err != nil {
+		helpers.NewError(c, http.StatusBadRequest, err)
+		log.Println(err)
+	} else {
+		c.JSON(http.StatusCreated, {{cmp_name.lower()}}Input)
+	}
+}
+
+
+// Get{{cmp_name}} godoc
+// @Tags {{cmp_name}}
+// @Summary Updates an {{cmp_name}} by ID
+// @Description Update {{cmp_name}}
+// @Accept  json
+// @Produce json
+// @Param id path integer true "User ID"
+// @Param user body models.{{cmp_name}} true "Add {{cmp_name.lower()}}"
+// @Success 200 {object} models.{{cmp_name}}
+// @Router /api/{{cmp_name.lower()}}/{id} [put]
+// @Security Authorization Token
+func Update{{cmp_name}}(c *gin.Context) {
+	s := repository.Get{{cmp_name}}Repository()
+	id := c.Params.ByName("id")
+	var {{cmp_name.lower()}}Input models.{{cmp_name}}
+	_ = c.BindJSON(&{{cmp_name.lower()}}Input)
+	if _, err := s.Get{{cmp_name}}ById(id); err != nil {
+		helpers.NewError(c, http.StatusNotFound, errors.New("{{cmp_name.lower()}} not found"))
+		log.Println(err)
+	} else {
+		if err := s.Update{{cmp_name}}(&{{cmp_name.lower()}}Input); err != nil {
+			helpers.NewError(c, http.StatusNotFound, err)
+			log.Println(err)
+		} else {
+			c.JSON(http.StatusOK, {{cmp_name.lower()}}Input)
+		}
+	}
+}
+
+// Get{{cmp_name}}ById godoc
+// @Tags {{cmp_name}}
+// @Summary Deletes {{cmp_name.lower()}} based on given ID
+// @Description Delete {{cmp_name.lower()}}
+// @Produce json
+// @Param id path integer true "{{cmp_name}} ID"
+// @Success 204
+// @Router /api/{{cmp_name.lower()}}/{id} [get]
+// @Security Authorization Token
+func Delete{{cmp_name}}(c *gin.Context) {
+	s := repository.Get{{cmp_name}}Repository()
+	id := c.Params.ByName("id")
+	var {{cmp_name.lower()}}Input models.{{cmp_name}}
+	_ = c.BindJSON(&{{cmp_name.lower()}}Input)
+	if {{cmp_name.lower()}}, err := s.Get{{cmp_name}}ById(id); err != nil {
+		helpers.NewError(c, http.StatusNotFound, errors.New("{{cmp_name.lower()}} not found"))
+		log.Println(err)
+	} else {
+		if err := s.Delete{{cmp_name}}({{cmp_name.lower()}}); err != nil {
+			helpers.NewError(c, http.StatusNotFound, err)
+			log.Println(err)
+		} else {
+			c.JSON(http.StatusNoContent, "")
+		}
+	}
+}

@@ -1,0 +1,51 @@
+package repository
+
+import (
+	"ai4am.com/go-restapi/internal/config"
+	"ai4am.com/go-restapi/models"
+	"strconv"
+)
+
+type {{cmp_name}}Repository struct{}
+var {{cmp_name.lower()}}Repository *{{cmp_name}}Repository
+
+// Singleton Desing Pattern
+func Get{{cmp_name}}Repository() *{{cmp_name}}Repository {
+	if {{cmp_name.lower()}}Repository == nil {
+		{{cmp_name.lower()}}Repository = &{{cmp_name}}Repository{}
+	}
+	return {{cmp_name.lower()}}Repository
+}
+
+func (r *{{cmp_name}}Repository) Get{{cmp_name}}ById(id string) (*models.{{cmp_name}}, error) {
+	var {{cmp_name.lower()}} models.{{cmp_name}}
+	where := models.{{cmp_name}}{}
+	where.ID, _ = strconv.ParseUint(id, 10, 64)
+	_, err := First(&where, &{{cmp_name.lower()}}, []string{})
+	if err != nil {
+		return nil, err
+	}
+	return &{{cmp_name.lower()}}, err
+}
+
+func (r *{{cmp_name}}Repository) GetAll{{cmp_name}}s() (*[]models.{{cmp_name}}, error) {
+	var {{cmp_name.lower()}}s []models.{{cmp_name}}
+	err := Find(&models.{{cmp_name}}{}, &{{cmp_name.lower()}}s, []string{}, "id asc")
+	return &{{cmp_name.lower()}}s, err
+}
+
+func (r *{{cmp_name}}Repository) Query{{cmp_name}}s(q *models.{{cmp_name}}) (*[]models.{{cmp_name}}, error) {
+	var {{cmp_name.lower()}}s []models.{{cmp_name}}
+	err := Find(&q, &{{cmp_name.lower()}}s, []string{}, "id asc")
+	return &{{cmp_name.lower()}}s, err
+}
+
+func (r *{{cmp_name}}Repository) Add{{cmp_name}}({{cmp_name.lower()}} *models.{{cmp_name}}) error {
+	err := Create(&{{cmp_name.lower()}})
+	err = Save(&{{cmp_name.lower()}})
+	return err
+}
+func (r *{{cmp_name}}Repository) Update{{cmp_name}}({{cmp_name.lower()}} *models.{{cmp_name}}) error { return config.GetDB().Save(&{{cmp_name.lower()}}).Error }
+
+func (r *{{cmp_name}}Repository) Delete{{cmp_name}}({{cmp_name.lower()}} *models.{{cmp_name}}) error { return config.GetDB().Unscoped().Delete(&{{cmp_name.lower()}}).Error }
+

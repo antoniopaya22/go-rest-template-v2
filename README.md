@@ -42,3 +42,13 @@ docker run -p 3000:3000 api-rest
 
 ```shell script
 go test -v ./test/...
+
+
+## Generate code
+
+```python
+python .\utils\generators\main.py
+```
+
+- Set the new Component inside internal/config/database.go --> migration()
+- Set the new Component inside internal/app.go --> SetRoutes()

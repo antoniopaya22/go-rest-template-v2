@@ -42,6 +42,7 @@ docker run -p 3000:3000 api-rest
 
 ```shell script
 go test -v ./test/...
+```
 
 
 ## Generate code

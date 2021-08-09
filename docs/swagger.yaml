@@ -1,0 +1,303 @@
+basePath: /
+definitions:
+  controllers.UserInput:
+    properties:
+      firstname:
+        type: string
+      lastname:
+        type: string
+      password:
+        type: string
+      role:
+        type: string
+      username:
+        type: string
+    required:
+    - password
+    - role
+    - username
+    type: object
+  models.Item:
+    properties:
+      created_at:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      taskRef:
+        type: integer
+      updated_at:
+        type: string
+    type: object
+  models.Task:
+    properties:
+      created_at:
+        type: string
+      id:
+        type: integer
+      items:
+        items:
+          $ref: '#/definitions/models.Item'
+        type: array
+      name:
+        type: string
+      text:
+        type: string
+      updated_at:
+        type: string
+      user:
+        $ref: '#/definitions/models.User'
+      userRefer:
+        type: integer
+    type: object
+  models.User:
+    properties:
+      created_at:
+        type: string
+      firstname:
+        type: string
+      hash:
+        type: string
+      id:
+        type: integer
+      lastname:
+        type: string
+      role:
+        type: string
+      updated_at:
+        type: string
+      username:
+        type: string
+    type: object
+host: localhost:3000
+info:
+  contact:
+    name: Antonio Paya Gonzalez
+  description: API REST in Golang with Gin Framework
+  title: Golang REST API Template
+  version: "2.0"
+paths:
+  /api/task/{id}:
+    get:
+      description: Delete task
+      parameters:
+      - description: Task ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: ""
+      security:
+      - Authorization Token: []
+      summary: Deletes task based on given ID
+      tags:
+      - Tasks
+  /api/tasks:
+    get:
+      description: Get Tasks
+      parameters:
+      - description: Name
+        in: query
+        name: name
+        type: string
+      - description: Text
+        in: query
+        name: text
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              items:
+                $ref: '#/definitions/models.Task'
+              type: array
+            type: array
+      summary: Retrieves tasks based on query
+      tags:
+      - Tasks
+    post:
+      consumes:
+      - application/json
+      description: Add Task
+      parameters:
+      - description: Add task
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/models.Task'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/models.Task'
+      security:
+      - Authorization Token: []
+      summary: Creates a new Task
+      tags:
+      - Tasks
+  /api/tasks/{id}:
+    get:
+      description: get Task by ID
+      parameters:
+      - description: Task ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Task'
+      security:
+      - Authorization Token: []
+      summary: Retrieves task based on given ID
+      tags:
+      - Tasks
+    put:
+      consumes:
+      - application/json
+      description: Update Task
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Add task
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/models.Task'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Task'
+      security:
+      - Authorization Token: []
+      summary: Updates an Task by ID
+      tags:
+      - Tasks
+  /api/users:
+    get:
+      description: Get Users
+      parameters:
+      - description: Username
+        in: query
+        name: username
+        type: string
+      - description: Firstname
+        in: query
+        name: firstname
+        type: string
+      - description: Lastname
+        in: query
+        name: lastname
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              items:
+                $ref: '#/definitions/models.User'
+              type: array
+            type: array
+      summary: Retrieves users based on query
+      tags:
+      - Users
+    post:
+      consumes:
+      - application/json
+      description: Add User
+      parameters:
+      - description: Add user
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/models.User'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/controllers.UserInput'
+      security:
+      - Authorization Token: []
+      summary: Creates a new User
+      tags:
+      - Users
+  /api/users/{id}:
+    get:
+      description: Delete user
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: ""
+      security:
+      - Authorization Token: []
+      summary: Deletes user based on given ID
+      tags:
+      - Users
+    put:
+      consumes:
+      - application/json
+      description: Update User
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Add user
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/models.User'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/controllers.UserInput'
+      security:
+      - Authorization Token: []
+      summary: Updates an User by ID
+      tags:
+      - Users
+securityDefinitions:
+  ApiKeyAuth:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"
